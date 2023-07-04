@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>메인</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/font.css">
+    <link rel="stylesheet" href="/stylesheets/detail.css">
+    <script src="/javascripts/script.js"></script>
+</head>
+<body>
+
+<% include header.ejs %>
+
+<div class="container">
+    <div class="column left-column data-container">
+        <h1><%= agent.name %></h1>
+        <p><%= agent.path %></p>
+        <hr>
+        <span class="label">Kafka-Topic :</span>
+        <span class="value"><%= agent.topic %></span><br><br>
+
+        <span class="label">Source-DB-User :</span>
+        <span class="value"><%= agent.username %></span><br><br>
+
+        <span class="label">Source-DB-Table :</span>
+        <span class="value"><%= agent.table %></span><br><br>
+
+        <span class="label">Target-DB-IP :</span>
+        <span class="value"><%= agent.target_ip %></span><br><br>
+
+        <span class="label">Target-DB-Port :</span>
+        <span class="value"><%= agent.target_port %></span><br><br>
+
+        <span class="label">Target-DB-Name :</span>
+        <span class="value"><%= agent.target_name %></span><br><br>
+
+        <span class="label">Target-DB-Password :</span>
+        <span class="value"><%= agent.target_password %></span><br><br>
+
+        <span class="label">Status :</span>
+        <span class="value"><%= agent.status %></span><br><br>
+
+        <span class="label">Time :</span>
+        <span class="value"><%= agent.createdAt %></span><br>
+    </div>
+    <div class="column right-column">
+        <div class="content container-fluid bg-white scrollable-table ">
+            <h1 style="text-align: center">Log</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 20%;">time</th>
+                        <th scope="col" style="width: 10%;">agent</th>
+                        <th scope="col" style="width: 50%;">message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% log.forEach(log => { %>
+                    <% let logClass = ''; %>
+                    <% if (log.level === '[Error]') { %>
+                        <% logClass = 'error-status'; %>
+                    <% } else if (log.level === '[Start]') { %>
+                        <% logClass = 'start-status'; %>
+                    <% } else if (log.level === '[Down]') { %>
+                        <% logClass = 'down'; %>
+                    <% } else if (log.level === '[Warning]') { %>
+                        <% logClass = 'warning'; %>
+                    <% } else if (log.level === '[Syslog]') { %>
+                        <% logClass = 'syslog'; %>
+                    <% } else { %>
+                        <% logClass = 'unknown'; %>
+                    <% } %>
+                    <tr class="<%= logClass %>">
+                        <td class="<%= logClass %>"><%= log.time %></td>
+                        <td class="<%= logClass %>"><%= log.level %></td>
+                        <td class="<%= logClass %>"><%= log.message %></td>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<% include sidebar.ejs %>
+
+<!-- Bootstrap core JavaScript -->
+<script>
+    setInterval(() => {
+      location.reload();
+    }, 60000)
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
